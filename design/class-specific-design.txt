@@ -1,0 +1,222 @@
+---------------------------------------------------------------Program Overview
+Class: Driver
+Class: Store
+Class: Customer
+Superclass: Movie
+    subclass: Comedy
+    subclass: Drama
+    subclass: Classics
+Superclass: Transaction
+    subclass: Borrow
+    subclass: Return
+    subclass: Inventory
+    subclass: History
+
+Auxiliary classes:
+    BSTree
+    LinkedList
+    HashTable<Element, Element>
+
+-------------------------------------------------------------------------Driver
+Driver: Responsible for running the program according to the data provided in
+        input files
+    Fields:
+    Methods:
+        Main {
+            Create Store redBox
+            redBox.populateStoreInventory(data4movies.txt)
+            redBox.populateCustomers(data4customers.txt)
+            redBox.readCommands(data4commands.txt)
+            return 0
+        }
+
+--------------------------------------------------------------------------Store
+Store: Represents the Store which holds all movies. Contains information on all    
+       movies available and all customers that are borrowing from the store. 
+       Will conduct all actions taken in from an input files
+
+    Fields:
+        // Name of the store
+        String name
+        // All available movies
+        HashTable<String, BST (AVL?)> inventory
+        // All the Customers of the Store
+        HashTable<Integer, Customer> customers
+        // All valid transactions that are read in from input file
+        LinkedList<Transaction> transactions
+    Public Methods:
+        // Constructor
+        Store()
+        // Will fill the inventory field of based on data from input file
+        populateStoreInventory(File)
+        // Will create Customer objects and store them in the customers field
+        populateCustomers(File)
+        // Will read in all the commands from the input file and add them to a
+        // Linked List
+        readTransactions(File)
+    Private Methods:
+        // Will execute all transactions from the transactions field
+        executeTransactions()
+        // Removes a movie from the inventory
+        removeFromInventory(Movie)
+        // Prints the inventory using the specified requirements for 
+        // each genre of movie. 
+        printInventory()
+        
+
+-----------------------------------------------------------------------Customer
+Customer: Represents a singular customer. Contains personal information about
+          the customer, as well as their movies and transaction history
+    Fields:
+        // Number representing the customer
+        int customerID 
+        // First name of the Customer
+        string firstName
+        // Last name of the Customer
+        string lastName
+        // All items the customer has borrowed currently 
+        HashTable<Movie, Integer> borrowedItems 
+        // All transactions from this customer
+        LinkedList<Transaction> transactionHistory
+    Public Methods:
+        // Constructor
+        Customer(String)
+
+--------------------------------------------------------------------------Movie
+MovieFactory: Allows for runtime processing of Movie object instantiation
+    Fields:
+    Public Methods:
+        // Uses a character to determine what genre of movie object should be
+        // created
+        createMovie(string)
+
+Movie: Represents a single movie, contains information about the movie itself
+       and how many copies of that movie are available in the store
+    Fields: 
+        // Title of the movie
+        string title
+        // Format of the movie (Will almost always be DVD)
+        string format
+        // Character representing the genre of movie  
+        string genre
+        // How many copies of the movie are currently available in the store
+        int stockInStore
+        // Director of the movie
+        string director 
+        // Year the movie was released
+        int releaseYear
+    Public Methods:
+        // Constructor
+        Movie(String)
+        // Destructor
+        virtual ~Movie()
+        // Compares two different types of movies (Comedy > Drama > Classic)
+        compareTo(Movie) 
+        
+
+Comedy extends Movie: Specified class for a Comedy movie
+    Fields:
+    Public Methods:
+        // Constructor
+        Comedy(String) 
+        // Destructor
+        virtual ~Comedy()
+        // Will compare two comedy movies
+        virtual compareTo(Comedy)
+
+Drama extends Movie: Specified class for a Drama movie
+    Fields:
+    Public Methods:
+        // Cosntructor
+        Drama(String)
+        // Destructor
+        virtual ~Drama()
+        // Will compare two drama movies
+        virtual compareTo(Drama)
+
+Classics extends Movie: Specified class for a Classical movie. Will contain
+                        major actor information in addition to release date
+    Fields:
+        // The lead actor in the movie
+        string majorActor
+        // The month in which the movie was released
+        int releaseMonth
+    Public Methods:
+        // Constructor
+        Classics(String) 
+        // Will compare two classics movies
+        compareTo(classics)
+
+---------------------------------------------------------------------Transaction
+TransactionFactory: Allows for runtime processing of Transaction object 
+                    instantiation
+    Fields:
+    Methods:
+        // Uses a character to identify which Transaction object to instantiate
+        createTransaction(string info, HashTable<char, Movie>& 
+                          HashTable<int, Customer>&) 
+
+Transaction: Represents a singular transaction involving one movie between the 
+             store and a customer
+    Fields:
+        // Date/Time when the transaction occured (data type unsure)
+        int timestamp
+    Methods:
+        // Contructor
+        Transaction()
+        // Destructor
+        virtual ~Transaction();
+        // Determines if the transaction can occur based on movie/customer 
+        // information
+        vitrual isValid()
+        // Conduct the action itself
+        virtual doTransaction() 
+
+Borrow extends Transaction: Represents a movie being borrowed from the Store by
+                            a Customer
+    Fields:
+        // Pointer to the Movie object 
+        Movie*
+        // Pointer to the Customer object
+        Customer* 
+    Methods:
+        // Will decrement the stock of a movie and add it into the borrowedItems
+        // field of a customer
+        virtual doTransaction(Store, Customer, Movie)
+        // Will check that the movie exists
+        virtual isValid(string info, HashTable<char, Movie>&,
+                        HashTable<int, Customer>&)
+
+Return extends Transaction: Represents a movie being returned to the Store from
+                            a Customer
+    Fields:
+        // Pointer to the Movie object 
+        Movie*
+        // Pointer to the Customer object
+        Customer* 
+    Methods:
+        // Will increment the stock of a movie and take it out of the
+        // borrowedItems field of a customer
+        doTransaction(Store, Customer, Movie)
+        // Will check that the movie exists
+        isValid(string info, HashTable<char, Movie>&, HashTable<int, Customer>&)
+
+Inventory extends Transaction: Will display the contents of the Store's
+                               inventory
+    Fields:
+    Methods:
+        // Prints the Stores inventory according to the specified requirements 
+        // for each different category of Movie
+        doTransaction(Store)
+        // Checks if the inventory is 0
+        isValid(string info, HashTable<char, Movie>&, HashTable<int, Customer>&)
+
+History extends Transaction: Will display the transaction History of a Customer
+    Fields:
+        // The customer whose history is printed
+        Customer*
+    Methods:
+        // Prints the ordered Transaction history of a Customer
+        doAction(Customer) 
+        // Checks whether the customer exists
+        isValid(string info, HashTable<char, Movie>&, HashTable<int, Customer>&)

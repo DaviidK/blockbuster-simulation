@@ -1,0 +1,74 @@
+
+---------------------------------------------------------------Program Overview
+Class: Driver
+Class: Store
+Class: Customer
+Superclass: Movie
+    subclass: Comedy
+    subclass: Drama
+    subclass: Classics
+Superclass: Transaction
+    subclass: Borrow
+    subclass: Return
+    subclass: Inventory
+    subclass: History
+
+Auxiliary classes:
+    BSTree
+    HashTable<Key, Value>
+    
+ In this design, Store acts as the central class, containing the store's 
+ transactions, its customers and its inventory of movies. 
+ Store contains Transaction (composition), and all the possible transaction
+ types (History, Inventory, Borrow and Return) inherit from Transaction.
+ Store also contains customer information in the form of a Hash Table of
+ Integer keys to Customer values, and a movie inventory in the form of a 
+ Hash Table of String keys to Binary Tree values.
+ The three types of movies (Comedy, Drama, Classics) inherit from the movie
+ class.
+
+-------------------------------------------------------------------------Driver
+Driver: Responsible for running the program according to the data provided in
+        input files.
+
+--------------------------------------------------------------------------Store
+Store: Represents the Store which holds all movies. Contains information on all    
+       movies available and all customers that are borrowing from the store. 
+       Will conduct all actions taken in from an input files.
+
+
+-----------------------------------------------------------------------Customer
+Customer: Represents a singular customer. Contains personal information about
+          the customer, as well as their movies and transaction history
+
+--------------------------------------------------------------------------Movie
+MovieFactory: Allows for runtime processing of Movie object instantiation.
+
+Movie: Represents a single movie, contains information about the movie itself
+       and how many copies of that movie are available in the store.
+        
+Comedy extends Movie: Specified class for a Comedy movie.
+
+Drama extends Movie: Specified class for a Drama movie.
+
+Classics extends Movie: Specified class for a Classical movie. Will contain
+major actor information in addition to release date.
+
+
+---------------------------------------------------------------------Transaction
+TransactionFactory: Allows for runtime processing of Transaction object 
+                    instantiation.
+
+Transaction: Represents a singular transaction involving one movie between the 
+             store and a customer
+
+Borrow extends Transaction: Represents a movie being borrowed from the Store by
+                            a Customer.
+
+Return extends Transaction: Represents a movie being returned to the Store from
+                            a Customer.
+
+Inventory extends Transaction: Will display the contents of the Store's
+                               inventory.
+
+History extends Transaction: Will display the transaction History of a Customer.
