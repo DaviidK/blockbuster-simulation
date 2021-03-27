@@ -8,3 +8,22 @@
 // Assumptions:
 //  - File input will be provided in the formats neccessary for each type of 
 //    associated Movie genre
+
+#ifndef MOVIEFACTORY_H
+#define MOVIEFACTORY_H
+
+#include "movie.h"
+
+using namespace std;
+
+class MovieFactory {
+
+    public:
+        //-------------------------------------------------Public member methods
+        // Instantiates the appropriate type of movie based on the given
+        // genre parameter
+        Movie* createMovie(string);
+    
+};
+
+#endif
