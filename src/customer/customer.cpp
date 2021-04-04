@@ -47,3 +47,14 @@ Customer::Customer(string data) {
 Customer::~Customer(){
     // TODO: Do we need to add anything here?
 }
+
+//---------------------------------------------------------Public member methods
+/**
+ * getHistory: Returns the transactionHistory field of this
+ * @param[in]: None
+ * @return[out]: None
+*/
+
+vector<Transaction> Customer::getHistory() const {
+     return this->transactionHistory; 
+}
