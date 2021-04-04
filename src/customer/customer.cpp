@@ -54,7 +54,15 @@ Customer::~Customer(){
  * @param[in]: None
  * @return[out]: None
 */
-
 vector<Transaction> Customer::getHistory() const {
      return this->transactionHistory; 
 }
+
+/**
+ * Adds a Transaction object to the end of the transactionHistory field
+ * @param[in]: None
+ * @return[out]: None
+*/
+void Customer::addToHistory(Transaction t) {
+	transactionHistory.push_back(t);
+} 
