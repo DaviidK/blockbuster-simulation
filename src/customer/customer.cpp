@@ -10,3 +10,40 @@
 //      customerID# (int) lastName (string) firstName (string)
 
 #include "customer.h"
+
+//---------------------------------------------------Constructors and Destructor
+/**
+ * Default Constructor: Creates an empty Customer object
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::Customer() {
+    this->customerID = -1;
+    this->firstName = "";
+    this->lastName = "";
+    this->transactionHistory.reserve(1);
+}
+
+//----------------------------------------------------------------------------
+/**
+ * string Constructor: Takes in data from passed parameter string and 
+   instantiates Customer fields accordingly
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::Customer(string data) {
+    this->customerID << data;
+    this->lastName << data;
+    this->firstName << data;
+    this->transactionHistory.reserve(1);
+}
+
+//----------------------------------------------------------------------------
+/**
+ * Destructor: Destroys a Customer object
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::~Customer(){
+    // TODO: Do we need to add anything here?
+}
