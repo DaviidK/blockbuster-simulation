@@ -8,3 +8,12 @@
 // Assumptions:
 //  - All input data will be provided in the format required by the associated 
 //    Transaction class
+
+#ifndef TRANSACTION_H
+#define TRANSACTION_H
+
+#include <string>
+#include <map>
+
+
+#endif
