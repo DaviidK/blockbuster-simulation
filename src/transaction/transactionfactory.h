@@ -8,3 +8,5 @@
 // Assumptions:
 //  - File input will be provided in the formats neccessary for each type of 
 //    associated Transaction object
+
+#include <string>
