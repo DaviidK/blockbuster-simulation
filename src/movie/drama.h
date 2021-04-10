@@ -25,6 +25,16 @@ class Drama: public Movie {
         virtual ~Drama();
         // Compares this object to other Drama objects
         virtual int compareTo(Drama);
+        // Overloads the = comparison operator
+        Drama& operator=(const Drama &);
+        // Overloads the == comparison operator
+		bool operator==(const Drama &) const;
+        // Overloads the != comparison operator
+		bool operator!=(const Drama &) const;
+        // Overloads the > comparison operator
+        bool operator>(const Drama &) const;
+        // Overloads the < comparison operator
+		bool operator<(const Drama &) const;
 
 };
 
