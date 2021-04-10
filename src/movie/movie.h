@@ -42,14 +42,24 @@ class Movie {
         int getReleaseYear();
         // Returns how many copies of the movie are available in the store
         int getStockInStore();
-        // Increase the stock by 1
+        // Increases the stock by 1
         void increaseStock();
-        // Decrease the stock by 1
+        // Decreases the stock by 1
         void decreaseStock();
         // Will compare this Movie object to the passed parameter Movie object.
         // Returns 1 if this is greater than the parameter, -1 if this is less 
         // than the parameter, and 0 if the two Movies are equal. 
         virtual int compareTo(Movie);
+        // Overloads the = comparison operator
+        Movie& operator=(const Movie &);
+        // Overloads the == comparison operator
+		bool operator==(const Movie &) const;
+        // Overloads the != comparison operator
+		bool operator!=(const Movie &) const;
+        // Overloads the > comparison operator
+        bool operator>(const Movie &) const;
+        // Overloads the < comparison operator
+		bool operator<(const Movie &) const;
 
     protected:
         // Genre of the movie
