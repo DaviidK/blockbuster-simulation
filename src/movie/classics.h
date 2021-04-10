@@ -26,6 +26,16 @@ class Classics : public Movie {
         virtual ~Classics();
         // Compares this object to other Classics objects
         virtual int compareTo(Classics);
+        // Overloads the = comparison operator
+        Classics& operator=(const Classics &);
+        // Overloads the == comparison operator
+		bool operator==(const Classics &) const;
+        // Overloads the != comparison operator
+		bool operator!=(const Classics &) const;
+        // Overloads the > comparison operator
+        bool operator>(const Classics &) const;
+        // Overloads the < comparison operator
+		bool operator<(const Classics &) const;
 
     private:
         //-------------------------------------------------Private member fields
