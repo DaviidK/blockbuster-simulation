@@ -16,6 +16,9 @@
 using namespace std;
 
 class Comedy : public Movie {
+
+    virtual friend ostream& operator<<(ostream&, const Comedy&);
+    
     public:
         //-------------------------------------------------Public member methods
         // Constructor: Creates a Comedy object and populates the genre, title,
