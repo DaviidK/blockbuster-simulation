@@ -24,7 +24,6 @@ Customer::Customer() {
     this->transactionHistory.reserve(1);
 }
 
-//----------------------------------------------------------------------------
 /**
  * string Constructor: Takes in data from passed parameter string and 
    instantiates Customer fields accordingly
@@ -38,15 +37,12 @@ Customer::Customer(string data) {
     this->transactionHistory.reserve(1);
 }
 
-//----------------------------------------------------------------------------
 /**
  * Destructor: Destroys a Customer object
  * @param[in]: None
  * @return[out]: None
 */
-Customer::~Customer(){
-    // TODO: Do we need to add anything here?
-}
+Customer::~Customer() {}
 
 //---------------------------------------------------------Public member methods
 /**
@@ -65,4 +61,4 @@ vector<Transaction> Customer::getHistory() const {
 */
 void Customer::addToHistory(Transaction t) {
 	transactionHistory.push_back(t);
-} 
+}
