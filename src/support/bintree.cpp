@@ -12,9 +12,7 @@
 //  - Classics Movie will be handled in Operator<< to print Major Actor 
 //    and Realese Month
 
-#include <iostream>
 #include "bintree.h"
-using namespace std;
 
 // ------------------ Constructors and Destructors ----------------------------
 
@@ -295,6 +293,45 @@ bool BinTree::findNode(Node* subRoot,
 
     } else {                                        // if node is NULL
         return false;                               // return false
+    }
+}
+
+/**
+ * Overloads the ostream << operator
+ * Prints the In-Order traversal of data inside BinTree Object
+ * Output example: 
+ * "and eee ff iii jj m not ooo pp r sssss tttt y z"
+ * Preconditions: NONE
+ * Postconditions: BinTree remains unchanged
+ * @param[out] ostream output;
+ * @param[in] BinTree btree: BinTree object to displayed
+ */
+ostream& operator<<(ostream& output, const BinTree& btree){
+    btree.inorderHelper(output, btree.root);        // call inorderHelper()
+    output << endl;                                 // line break;
+    return output;                                  // return ostream&
+}
+
+/**
+ * private inorderHelper
+ * Overload for printing Binary Search Tree inorder
+ * Operation: Inorder Printing
+ *  - Traverses through left child 
+ *  - Prints NodeData
+ *  - Then traverses through right child
+ * Preconditions: BinTree is not empty
+ * Postconditions: BinTree remains unchanged
+ * @param[out] ostream output;
+ * @param[in] Node* node: BinTree Node to be traversed
+ */
+void BinTree::inorderHelper(ostream& out, const Node* node) const {
+    if (node != NULL) {
+        inorderHelper(out, node->left);     // traverse throught left child
+    
+        // print the nodeData using inorder Operation
+        out << *node->data << " ";
+    
+        inorderHelper(out, node->right);    // traverse throught right child
     }
 }
 

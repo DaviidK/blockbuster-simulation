@@ -14,12 +14,13 @@
 #ifndef BINTREE_H
 #define BINTREE_H
 
-#include <iostream>
 #include "../movie/movie.h"
 
 using namespace std;
 
 class BinTree {				
+
+    friend ostream& operator<<(ostream&, const BinTree&);
 
 	public:
         //---------------------------------------------Constructors & Destructor
@@ -80,6 +81,8 @@ class BinTree {
         // Helper method to take in a Movie and find the correct location to add
         // it in the tree. Will return false if the data already exists in tree
         bool insertHelper(Node*&, Movie*);
+        // Helper method for ostream<< inorder traversal
+		void inorderHelper(ostream&, const Node*) const; 
 
 };
 
