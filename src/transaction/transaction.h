@@ -15,5 +15,22 @@
 #include <string>
 #include <map>
 
+using namespace std;
+
+class Transaction {
+    public:
+        //-------------------------------------------------Public member methods
+        // Constructor: Creates an empty Transaction object
+        Transaction();
+        // Virtual destructor: Destroys the Transaction object
+        virtual ~Transaction();
+        // Using the type of Transaction object that is instantiated, determine 
+        // and conduct the necessary action
+        virtual void doTransaction() const;
+
+    protected:
+        // String representing the type of transaction
+        string transactionType; 
+};
 
 #endif
