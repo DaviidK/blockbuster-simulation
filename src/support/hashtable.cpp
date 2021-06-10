@@ -106,3 +106,13 @@ template<typename Value>
 int HashTable<Value>::hash(const int& key) const {
     return key % size;
 }
+
+// -----------------------------------------------------------------Node methods
+/**
+* Constructor for private Struct Node
+* @param[in] Value* data: sets coeff value
+*/
+template<typename Value> 
+HashTable<Value>::Node::Node(int k, Value* d, Node* n) : key(k), 
+                                                         data(d), 
+                                                         next(n) {}
