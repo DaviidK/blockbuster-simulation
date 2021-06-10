@@ -10,16 +10,19 @@
 
 #include "hashtable.h"
 
-// ------------------ Constructors and Destructors ----------------------------
+//---------------------------------------------------Constructors and Destructor
 
 /**
  * Default Constructor
- * Creates an empty Hashtable and sets the size to 0
+ * Creates an empty Hashtable and sets the size to 0, if size is not given.
  * Preconditions: NONE
  * Postconditions: Hashtable (empty) is created, data is NULL
  */
-template<class Value> 
-HashTable<Value>::HashTable() : data(NULL), size(0) {}						
+template<typename Value> 
+HashTable<Value>::HashTable(int size) : size(size) {
+    // Setting the array of Nodes containing data to NULL
+    Node* data[size];
+}						
 
 /**
  * Destructor
@@ -27,11 +30,12 @@ HashTable<Value>::HashTable() : data(NULL), size(0) {}
  * Preconditions: NONE
  * Postconditions: Hashtable becomes empty and value becomes NULL
  */
-template<class Value> 
+template<typename Value> 
 HashTable<Value>::~HashTable() {
     
 }
 
+//---------------------------------------------------------Public member methods
 /**
  * public insert
  * Inserts a new object of given value at the passed Key location
@@ -40,9 +44,12 @@ HashTable<Value>::~HashTable() {
  * @param[in] int key: Key of the object stored
  * @param[in] Value value: the object to be stored
  */
-template<class Value> 
-void HashTable<Value>::insert(const int& key, const Value& value) {
-    
+template<typename Value> 
+void HashTable<Value>::insert(const int& key, const Value*& value) {
+    // Finds the index for storing data
+    int index = this->hash(key);
+    // Inserts the key and value to table
+    this->data[index]->value = new Node(key, value, this->data[index]);
 }
 
 
@@ -54,10 +61,9 @@ void HashTable<Value>::insert(const int& key, const Value& value) {
  * Postconditions: Value is removed
  * @param[in] int key: Key of the object to be removed
  */
-template<class Value> 
-void HashTable<Value>::remove(const int&) {
+template<typename Value> 
+bool HashTable<Value>::remove(const int& key) {
     //TODO Implement Remove
-    //TODO if Key does not exist, Print a message?
 }
 
 /**
@@ -68,7 +74,35 @@ void HashTable<Value>::remove(const int&) {
  * Postconditions: NONE
  * @param[in] int key: Key of the object to be retrieved
  */
-template<class Value> 
-Value* HashTable<Value>::retrieve(const int&) const {
+template<typename Value> 
+bool HashTable<Value>::retrieve(const int& searchKey, Value*& foundData) const {
+    // Find the index to put the insterted data in
+    int index = this->hash(searchKey);
+    
+    Node* current = data[index];
+    
+    while (current != NULL) {
+        if(current->key == searchKey) {
+            // Save data to foundData param
+            foundData = current->value;
+            return true;
+        }
+        // Point to next node
+        current = current->next;
+    }
+    
+    return false;  
+}
 
+//--------------------------------------------------------Private member methods
+/**
+ * private hash
+ * Hashing function: Takes in a Key and returns the hashed index
+ * Preconditions: HashTable size should not be 0.
+ * Postconditions: NONE
+ * @param[in] int key: Key of the object to be hashed
+ */
+template<typename Value> 
+int HashTable<Value>::hash(const int& key) const {
+    return key % size;
 }
