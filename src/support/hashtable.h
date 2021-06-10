@@ -13,28 +13,40 @@
 
 using namespace std;
 
-template<class Value> 
+template<typename Value> 
 class HashTable {
 
     public:
         // Constructor: Will create an empty HashTable object
-        HashTable();
+        HashTable(int);
         // Destructor: Will delete the HashTable object
         ~HashTable();
         // Inserts a new object at the passed Key location
-        void insert(const int&, const Value&);
+        void insert(const int&, const Value*&);
         // Removes the object contained in the passed Key location
-        void remove(const int&);
+        bool remove(const int&);
         // Retrieves the object present at the passed Key location
-        Value* retrieve(const int&) const;
+        // Returns the Object pointer to the 2nd parameter;
+        bool retrieve(const int&, Value*&) const;
 
     private: 
-        // Array that holds the data
-        Value* data;
+        struct Node {
+            // Node constructor with NULL as Next pointer default value
+			Node(int, Value*, Node* = NULL);
+            // Pointer to the Key
+            int key;
+            // Pointer to the Value
+            Value* value;
+            // Pointer to the next Node
+            Node* next;
+        };
+        // Array that holds the Node
+        Node* data;
         // Array size
         int size;
         // Hashing function: Takes in a Key and returns the hashed index
         int hash(const int&) const;
+        
 
 };
 
