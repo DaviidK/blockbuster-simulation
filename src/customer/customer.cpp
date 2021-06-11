@@ -27,30 +27,32 @@ Customer::Customer() {
 /**
  * string Constructor: Takes in data from passed parameter string and 
    instantiates Customer fields accordingly
- * @param[in]: None
- * @return[out]: None
 */
-Customer::Customer(string data) {
-    this->customerID << data;
-    this->lastName << data;
-    this->firstName << data;
+Customer::Customer(string input) {
+    stringstream data(input);
+    data >> this->customerID;
+    data >> this->lastName;
+    data >> this->firstName;
     this->transactionHistory.reserve(1);
 }
 
 /**
  * Destructor: Destroys a Customer object
- * @param[in]: None
- * @return[out]: None
 */
 Customer::~Customer() {}
 
 //---------------------------------------------------------Public member methods
 /**
  * getHistory: Returns the transactionHistory field of this
- * @param[in]: None
- * @return[out]: None
 */
-vector<Transaction> Customer::getHistory() const {
+int Customer::getCustomerID() const {
+     return this->customerID; 
+}
+
+/**
+ * getHistory: Returns the transactionHistory field of this
+*/
+vector<Transaction> Customer::getTransactionHistory() const {
      return this->transactionHistory; 
 }
 
@@ -59,6 +61,6 @@ vector<Transaction> Customer::getHistory() const {
  * @param[in]: None
  * @return[out]: None
 */
-void Customer::addToHistory(Transaction t) {
-	transactionHistory.push_back(t);
+void Customer::addToHistory(const Transaction& t) {
+	this->transactionHistory.push_back(t);
 }

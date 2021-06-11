@@ -11,11 +11,12 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
-#include <string>
-#include <vector>
 #include "../support/hashtable.h"
 #include "../movie/movie.h"
 #include "../transaction/transaction.h"
+#include <string>
+#include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -30,10 +31,15 @@ class Customer {
         Customer(string);
         // Destructor: Destroys a Customer object
         ~Customer();
+        // Returns the customerID field
+        int getCustomerID() const;
+        // Returns the transactionHistory field
+        vector<Transaction> getTransactionHistory() const;
         // Adds a Transaction object to the transactionHistory field
         void addToHistory(const Transaction&);
-        // Returns the transactionHistory field
-        list<Transaction> getHistory();
+
+        void printHistory() const;
+        
     private:
         //-------------------------------------------------Private member fields
         // Number representing the customer
