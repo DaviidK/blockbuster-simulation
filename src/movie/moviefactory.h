@@ -23,6 +23,7 @@ class MovieFactory {
         // Instantiates the appropriate type of movie based on the given
         // genre parameter
         Movie* createMovie(string);
+        Movie* createMovie(char genre, string input);
     
 };
 
