@@ -18,27 +18,30 @@ using namespace std;
 
 class Classics : public Movie {
 
-    virtual friend ostream& operator<<(ostream&, const Classics&);
+        friend ostream& operator<<(ostream&, const Classics&);
         
     public:
         //-------------------------------------------------Public member methods
         // Constructor: Creates a Classics object and populates the genre,
         // title, director, and releaseYear fields
         Classics(string);
+        Classics(char, string);
         // Virtual destructor: Destroys the Classics object
         virtual ~Classics();
         // Compares this object to other Classics objects
-        virtual int compareTo(Classics);
-        // Overloads the = comparison operator
-        Classics& operator=(const Classics &);
+        virtual int compareTo(const Movie &) const;
         // Overloads the == comparison operator
-		bool operator==(const Classics &) const;
+		virtual bool operator==(const Movie &) const;
         // Overloads the != comparison operator
-		bool operator!=(const Classics &) const;
+		virtual bool operator!=(const Movie &) const;
         // Overloads the > comparison operator
-        bool operator>(const Classics &) const;
+        virtual bool operator>(const Movie &) const;
         // Overloads the < comparison operator
-		bool operator<(const Classics &) const;
+		virtual bool operator<(const Movie &) const;
+        // Returns the major actor
+        string getMajorActor() const;
+        // Returns the movie release month
+        int getReleaseMonth() const;
 
     private:
         //-------------------------------------------------Private member fields
