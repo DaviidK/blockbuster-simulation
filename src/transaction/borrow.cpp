@@ -16,32 +16,49 @@
 /**
  * Default Constructor: Populates the fields of the Borrow object by using the 
    passed data
- * @param[string]: Data from input file
- * @param[map<string, BinTree<Movie>>&]: All movies contained in the store
- * @param[HashTable<int, Customer>&]: All customers of the store
- * @return[out]: None
+ * @param[stringstream&]: Data from input file
+ * @param[map<char, BinTree>&]: All movies contained in the store
+ * @param[HashTable<Customer>&]: All customers of the store
 */
-Borrow::Borrow(string data, map<string, BinTree<Movie>>& inventory,
-                    HashTable<int, Customer>& customers) { 
+Borrow::Borrow(stringstream& data, map<char, BinTree>& inventory,
+               HashTable<Customer>& customers) { 
     // Set this as a "Borrow" type of transaction
-    this.transactionType = "Borrow";
+    this->transactionType = "Borrow";
 
-    // Pull customer ID# and link the correct Customer object to this action by
-    // searching through the HashTable
-    int customerNumber << data;
-    this->customer = customers.retrieve(customerNumber);
+    // Pull customer ID# from passed data
+    int customerNumber;
+    data >> customerNumber;
 
-    // Pull the movie data and search through the correct BinTree in inventory 
-    string movieFormat << data;
-    char movieGenre << data;
-    BinTree* movieList = inventory.at(movieGenre);
-    this->movie = movieList.retrieve(data);
+    // Search through the HashTable to find the customer with the passed ID #, 
+    // and set the "customer" field to that object
+    customers.retrieve(customerNumber, this->customer);
+    // If customer doesn't exist, report error to user
+    if (this->customer == NULL) {
+        cout << "ERROR: customer " << customerNumber << " is not valid";
+    }    
+
+    // Pull the movie format & genre from the passed data 
+    string movieFormat;
+    data >> movieFormat;
+    char movieGenre;
+    data >> movieGenre;
+
+    // Find the BinTree that corresponds to the genre of movie
+    BinTree movieList = inventory.at(movieGenre);
+    // Search through the BinTree to find a movie with the matching identifying
+    // data and set the "movie" field to that object
+    MovieFactory movieFac = MovieFactory();
+    Movie* tempMovie = movieFac.createMovie(movieGenre, data.str());
+
+
+    if (movieList.retrieve(*tempMovie, this->movie)) {
+        // If movie doesn't exist, report error to user
+        cout << "ERROR: movie " << data.str() << " is not valid";
+    }
 } 
 
 /**
- * Destructor: Destroys a Transaction object
- * @param[in]: None
- * @return[out]: None
+ * Destructor: Destroys a Borrow object
 */
 Borrow::~Borrow() {} 
 
@@ -50,10 +67,16 @@ Borrow::~Borrow() {}
  * doTransaction: Will override the superclass method to decrement the stock of 
    the movie associated with this object and will add a Borrow action to the 
    associated Customer's history
- * @param[in]: None
- * @return[out]: None
 */
 void Borrow::doTransaction() const {
     this->movie->decreaseStock();
-    this->customer->addToHistory(this);
-} 
+    this->customer->addToHistory(*this);
+}
+
+Movie* Borrow::getMovie() const {
+    return this->movie;
+}
+
+Customer* Borrow::getCustomer() const {
+    return this->customer;
+}
