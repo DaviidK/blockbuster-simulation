@@ -13,6 +13,13 @@
 #define BORROW_H
 
 #include "transaction.h"
+#include "../movie/movie.h"
+#include "../customer/customer.h"
+#include "../support/hashtable.h"
+#include "../support/bintree.h"
+#include "../movie/moviefactory.h"
+#include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -21,12 +28,14 @@ class Borrow : public Transaction {
         //-------------------------------------------------Public member methods
         // Constructor: Will create a Borrow object and populate the m and c
         // fields based on passed data
-        Borrow(string, HashTable<string, Movie>&, HashTable<int, Customer>&);
+        Borrow(stringstream&, map<char, BinTree>&, HashTable<Customer>&);
         // Destructor: Will destroy the Borrow object
         virtual ~Borrow();
         // Will decrement the stock of a movie and log the Borrow Transaction in
         // the Customer's history field
-        virtual void doTransaction(Store&, Customer&, Movie&) const;
+        virtual void doTransaction() const;
+        Movie* getMovie() const;
+        Customer* getCustomer() const;
 
     private:
         //-------------------------------------------------Private member fields
@@ -34,12 +43,6 @@ class Borrow : public Transaction {
         Movie* movie;
         // Pointer to the Customer object associated with this transaction
         Customer* customer;
-        
-        //------------------------------------------------Private member methods
-        // Will check that the movie exists in the Store's inventory and that
-        // a Customer exists with the matching ID number
-        virtual bool isValid(string info, map<string, BinTree<Movie>>&,
-                             HashTable<int, Customer>&) const;
 };
 
 #endif
