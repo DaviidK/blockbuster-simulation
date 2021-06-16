@@ -1,0 +1,8 @@
+#----Testing files----#
+*.o
+*.out
+*.vscode
+*.class
+
+#----File locks----#
+*.~lock*
