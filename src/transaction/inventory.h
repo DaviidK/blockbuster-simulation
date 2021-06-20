@@ -11,6 +11,12 @@
 #define INVENTORY_H
 
 #include "transaction.h"
+#include "../store/store.h"
+#include "../movie/movie.h"
+#include "../support/hashtable.h"
+#include "../support/bintree.h"
+#include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -18,20 +24,17 @@ class Inventory : public Transaction {
     public:
         //-------------------------------------------------Public member methods
         // Constructor: Creates an empty Inventory object
-        Inventory(HashTable<string, Movie>&);
+        Inventory(map<char, BinTree>&);
         // Destructor: Deletes the Inventory object
         virtual ~Inventory();
         // Prints the Store's inventory according to the specified requirements 
         // for each different category of Movie
-        virtual void doTransaction(HashTable<string, Movie>&) const;
+        virtual void doTransaction() const;
 
     private:
         //-------------------------------------------------Private member fields
         // All available movies in the Store
-        HashTable<string, BinTree>* inventory;
-        //------------------------------------------------Private member methods
-        // Will check if the Store's inventory is empty
-        virtual bool isValid(HashTable<char, Movie>&) const;
+        map<char, BinTree> inventory;
 };
 
 #endif
