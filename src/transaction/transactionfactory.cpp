@@ -10,14 +10,19 @@
 //  - File input will be provided in the formats neccessary for each type of 
 //    associated Transaction object
 
-#include "transactionFactory.h"
+#include "transactionfactory.h"
 
 //----------------------------------------------------------Public member method
-// Will parse through passed parameter information to determine which type of
-// Transaction object to create and return
-Transaction createTransaction(string input,
-                              map<string, BinTree<Movie>>& inventory,
-                              HashTable<int, Customer>& customers) const {
+/**
+ * createTransaction: Will parse through passed parameter information to 
+   determine which type of Transaction object to create and return
+ * @param[string&]: Input data to be parsed
+ * @param[map<char, BinTree>&]: All movies contained in the store
+ * @param[HashTable<Customer>&]: All customers of the store
+*/
+Transaction* createTransaction(string input,
+                              map<char, BinTree>& inventory,
+                              HashTable<Customer>& customers) {
     // Place data from passed input into stringstream
     stringstream inputStream; 
     inputStream << input;
@@ -30,33 +35,39 @@ Transaction createTransaction(string input,
     // Create a Transaction object and instantiate it according to the character
     // found in input. For each type of Transaction, return NULL if object
     // instantiated was invalid
-    Transaction t;
-    swtich (transType):
-        case("B"):
-            t = Borrow(inputStream, inventory, customers);
-            if (t.movie == NULL || t.customer == NULL) {
+    Transaction* t;
+    switch (transType) {
+        case 'B': {
+            t = new Borrow(inputStream, inventory, customers);
+            Borrow* b = static_cast<Borrow*>(t);
+            if (b->getMovie() == NULL || b->getCustomer() == NULL) {
                 return NULL;
             }
-            break;
-        case("H"):
-            t = History(inputStream, customers);
-            if (t.customer == NULL) {
+            return b;
+        }
+        case 'H': {
+            t = new History(inputStream, customers);
+            History* h = static_cast<History*>(t);
+            if (h->getCustomer() == NULL) {
                 return NULL;
             }
-            break;
-        case("I"): 
-            t = Inventory(inventory);
-            break;
-        case("R"):
-            t = Return(inputStream, inventory, customers);
-            if (t.movie == NULL || t.customer == NULL) {
+            return h;
+        }
+        case 'I': { 
+            t = new Inventory(inventory);
+            return t; 
+        }
+        case 'R': {
+            t = new Return(inputStream, inventory, customers);
+            Return* r = static_cast<Return*>(t);
+            if (r->getMovie() == NULL || r->getCustomer() == NULL) {
                 return NULL;
             }
-            break;
-        case(default):
+            return r;
+        }
+        default:
             cout << "ERROR: Transaction type \"" << transType 
             << "\" is not valid";
             return NULL;
-    
-    return t;
+    }
 }
