@@ -15,26 +15,24 @@
 //---------------------------------------------------Constructors and Destructor
 /**
  * Default Constructor: Creates an empty Transaction object
- * @param[in]: None
- * @return[out]: None
-*/
+ */
 Transaction::Transaction() { 
-    this.transactionType = "";
+    this->transactionType = "";
 } 
 
 /**
  * Destructor: Destroys a Transaction object
- * @param[in]: None
- * @return[out]: None
-*/
+ */
 Transaction::~Transaction() {} 
 
 //---------------------------------------------------------Public member methods
 /**
  * doTransaction: Virtual method which is overriden by Transaction subclasses. 
-   Will execute differently depending on what kind of Transaction object is 
-   instantiated
- * @param[in]: None
- * @return[out]: None
-*/
+ * Will execute differently depending on what kind of Transaction object is 
+ * instantiated
+ */
 void Transaction::doTransaction() const {}
+
+string Transaction::getTransactionType() const {
+    return this->transactionType;
+}
