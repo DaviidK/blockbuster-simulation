@@ -13,12 +13,10 @@
 /**
  * Default Constructor: Populates the fields of the Inventory object by using
    the passed data
- * @param[stringstream]: Data from input file
- * @param[map<string, BinTree<Movie>>&]: All customers of the store
- * @return[out]: None
+ * @param[stringstream&]: Data from input file
+ * @param[map<char, BinTree>&]: All customers of the store
 */
-Inventory::Inventory(stringstream data,
-                     map<string, BinTree<Movie>>& allMovies) { 
+Inventory::Inventory(map<char, BinTree>& allMovies) { 
     // Set this as a "Inventory" type of transaction
     this->transactionType = "Inventory";
 
@@ -28,20 +26,42 @@ Inventory::Inventory(stringstream data,
 
 /**
  * Destructor: Destroys an Inventory object
- * @param[in]: None
- * @return[out]: None
 */
-virtual Inventory::~Inventory() {} 
+Inventory::~Inventory() {} 
 
 //---------------------------------------------------------Public member methods
 /**
  * doTransaction: Will override the superclass method to print all movies
    currently contained in the Store
- * @param[in]: None
- * @return[out]: None
 */
-virtual void inventory::doTransaction() const {
-    for (BinTree movieGenre : this->inventory) {
-        cout << movieGenre;
+void Inventory::doTransaction() const {
+    // Pull the BSTree for comedy movies from inventory
+    BinTree comedyMovies = this->inventory.at('F');
+    // Print out all comedy movies if a BSTree exists
+    if (!comedyMovies.isEmpty()) {
+        cout << "Comedy Movies:" << endl;
+        cout << comedyMovies << endl;
+    } else {
+        cout << "No Comedy movies were found!" << endl;
+    }
+
+    // Pull the BSTree for drama movies from inventory
+    BinTree dramaMovies = this->inventory.at('D');
+    // Print out all drama movies if a BSTree exists
+    if (!dramaMovies.isEmpty()) {
+        cout << "Drama Movies:" << endl;
+        cout << comedyMovies << endl;
+    } else {
+        cout << "No Drama movies were found!" << endl;
+    }
+
+    // Pull the BSTree for classics movies from inventory
+    BinTree classicsMovies = this->inventory.at('C');
+    // Print out all classics movies if a BSTree exists
+    if (!classicsMovies.isEmpty()) {
+        cout << "Classics Movies:" << endl;
+        cout << classicsMovies << endl;
+    } else {
+        cout << "No Classics movies were found!" << endl;
     }
 }
