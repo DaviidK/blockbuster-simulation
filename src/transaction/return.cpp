@@ -10,44 +10,54 @@
 //  - All input data will be provided in the following format:
 //       actionType(char) customerID#(int) mediaFormat(char) movieData
 
-#include "transaction.h"
-#include "../movie/movie.h"
-#include "../customer/customer.h"
-#include "../store/store.h"
-#include "../support/hashtable.h"
-#include "../support/bintree.h"
-#include <map>
+#include "return.h"
 
 //---------------------------------------------------Constructors and Destructor
 /**
  * Default Constructor: Populates the fields of the return object by using the 
    passed data
- * @param[string]: Data from input file
- * @param[map<string, BinTree<Movie>>&]: All movies contained in the store
- * @param[HashTable<int, Customer>&]: All customers of the store
- * @return[out]: None
+ * @param[stringstream&]: Data from input file
+ * @param[map<char, BinTree>&]: All movies contained in the store
+ * @param[HashTable<Customer>&]: All customers of the store
 */
-Return::Return(string data, map<string, BinTree<Movie>>& inventory,
-                    HashTable<int, Customer>& customers) { 
+Return::Return(stringstream& data, map<char, BinTree>& inventory,
+               HashTable<Customer>& customers) { 
     // Set this as a "Return" type of transaction
-    this.transactionType = "Return";
+    this->transactionType = "Return";
+    // Pull customer ID# from passed data
+    int customerNumber;
+    data >> customerNumber;
+    
+    // Search through the HashTable to find the customer with the passed ID #, 
+    // and set the "customer" field to that object
+    customers.retrieve(customerNumber, this->customer);
+    // If customer doesn't exist, report error to user
+    if (this->customer == NULL) {
+        cout << "ERROR: customer " << customerNumber << " is not valid";
+    }    
 
-    // Pull customer ID# and link the correct Customer object to this action by
-    // searching through the HashTable
-    int customerNumber << data;
-    this->customer = customers.retrieve(customerNumber);
+    // Pull the movie format & genre from the passed data 
+    string movieFormat;
+    data >> movieFormat;
+    char movieGenre;
+    data >> movieGenre;
 
-    // Pull the movie data and search through the correct BinTree in inventory 
-    string movieFormat << data;
-    char movieGenre << data;
-    BinTree* movieList = inventory.at(movieGenre);
-    this->movie = movieList.retrieve(data);
+    // Find the BinTree that corresponds to the genre of movie
+    BinTree movieList = inventory.at(movieGenre);
+    // Search through the BinTree to find a movie with the matching identifying
+    // data and set the "movie" field to that object
+    MovieFactory movieFac = MovieFactory();
+    Movie* tempMovie = movieFac.createMovie(movieGenre, data.str());
+
+
+    if (movieList.retrieve(*tempMovie, this->movie)) {
+        // If movie doesn't exist, report error to user
+        cout << "ERROR: movie " << data.str() << " is not valid";
+    }
 } 
 
 /**
- * Destructor: Destroys a Transaction object
- * @param[in]: None
- * @return[out]: None
+ * Destructor: Destroys a Return object
 */
 Return::~Return() {} 
 
@@ -56,10 +66,16 @@ Return::~Return() {}
  * doTransaction: Will override the superclass method to increment the stock of 
    the movie associated with this object and will add a Return action to the 
    associated Customer's history
- * @param[in]: None
- * @return[out]: None
 */
-void return::doTransaction() const {
+void Return::doTransaction() const {
     this->movie->increaseStock();
-    this->customer->addToHistory(this);
+    this->customer->addToHistory(*this);
+}
+
+Movie* Return::getMovie() const {
+    return this->movie;
+}
+
+Customer* Return::getCustomer() const {
+    return this->customer;
 }
