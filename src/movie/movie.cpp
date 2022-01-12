@@ -16,20 +16,72 @@
 //         Classics: majorActor(string) releaseMonth(int) releaseYear(int)
 
 #include "movie.h"
-#include <sstream>
-#include <algorithm>
+
+/**
+ * printElement
+ * Helper method that allows for easy printing of elements at set intervals
+ * @param[in] Typename T: Data to be printed
+ * @param[in] int width: Width between next element on print line
+ * @return string: Resulting string after element adjustment
+ */
+template<typename T> string printElement(T t, const int& width) {
+    const char separator = ' ';
+    stringstream result; 
+    result << left << setw(width) << setfill(separator) << t;
+    return result.str();
+}
+
+/**
+ * Overloads the ostream << operator
+ * Prints the Movie details and stock
+ * @param[in] ostream output;
+ * @param[in] Movie movie: details to displayed
+ * @return ostream : output representing a Movie object
+ */
+ostream& operator<<(ostream& output, const Movie& movie){
+    output << printElement(movie.getTitle(), 35);
+    output << printElement(movie.getDirector(), 28);
+    output << printElement(movie.getReleaseYear(), 15);
+    output << printElement(movie.getFormat(), 10);
+    output << printElement(movie.getStockInStore(), 0);
+    output << endl;
+    // return ostream&
+    return output;
+}
 
 //---------------------------------------------------Constructors and Destructor
 /**
  * Default Constructor
  * Creates a Movie object
  */
-Movie::Movie() {}
+Movie::Movie() {
+    this->title = "";
+    this->director = "";
+    this->releaseYear = -1;
+    this->stockInStore = -1;
+    this->genre = ' ';
+}
 
-//---------------------------------------------------------Public Data Accessors
+/**
+ * Virtual Destructor
+ * Destroys the Movie object
+ */
+Movie::~Movie() {}
+
+//---------------------------------------------------------Public member methods
+/**
+ * public getFormat
+ * Returns the movie format
+ * @return char : movie format
+ */
+char Movie::getFormat() const {
+    return this->format;
+}
+
 /**
  * public getGenre
  * Returns the movie genre
+ * @return char : movie genre
  */
 char Movie::getGenre() const {
     return this->genre;
@@ -38,23 +90,25 @@ char Movie::getGenre() const {
 /**
  * public getDirector
  * Returns the movie director
+ * @return string : movie director
  */
 string Movie::getDirector() const {
     return this->director;
 }
 
 /**
- * public getDirector
- * Returns the movie director
+ * public getTitle
+ * Returns the movie title
+ * @return string : movie title
  */
 string Movie::getTitle() const {
     return this->title;
 }
 
-
 /**
  * public getReleaseYear
  * Returns the movie release year
+ * @return int : movie release year
  */
 int Movie::getReleaseYear() const {
     return this->releaseYear;
@@ -63,16 +117,25 @@ int Movie::getReleaseYear() const {
 /**
  * public getStockInStore
  * Returns how many copies of the movie are available in the store
+ * @return int : movie stock in store
  */
 int Movie::getStockInStore() const {
     return this->stockInStore;
 }
 
-//---------------------------------------------------------Public Data Modifiers
+/**
+ * public setStock
+ * Returns how many copies of the movie are available in the store
+ * @param[in] int newStock : movie stock in store
+ */
+void Movie::setStock(int newStock) {
+    this-> stockInStore = newStock;
+}
+
 /**
  * public increaseStock
  * Increases the stock by 1
- * @return bool true if stock is increased, else false
+ * @return bool : true if stock is increased, else false
  */
 bool Movie::increaseStock() {
     this->stockInStore++;
@@ -82,67 +145,76 @@ bool Movie::increaseStock() {
 /**
  * public decreaseStock
  * Decreases the stock by 1
- * @return bool true if stock is decreased, else false
+ * @return bool : true if stock is decreased, else false
  */
 bool Movie::decreaseStock() {
-    // check if there is stock left
+    // If there is stock left, decrese stock by 1 then return true,
+    // else return false
     if (this->stockInStore > 0) {
         this->stockInStore--;
         return true;
     } else {
-        // if stock is not available
-        return false;                                       // TODO should we print a massage here?
+        // Stock is not available
+        return false;
     }
 }
 
-//------------------------------------------------------Protected Helper Methods
+//------------------------------------------------------Protected member methods
 /**
  * protected checkValidInput
  * Check for invalid input. If input is invalid, prints an error and sets the 
  * Movie title to "".
- * @param[in] stringstream&: Data from input file
- * @return bool if valid
+ * @param[in] stringstream& : Data from input file
+ * @return bool : if valid
  */
-bool Movie::checkValidInput(stringstream& input, const string& field) {
-    string dataString;
+bool Movie::checkValidInput(string& input, const string& field) {
+    // Initialize temporary data
     int dataInt;
 
+    // Erase leading whitespace from the passed string
+    input.erase(0, 1);
+
+    // Error/Invalid input checking for Movie integer fields OR string fields
     if (field == "Stock" || field == "Year") {
-        input >> dataInt;
-        
+        // Create stream from input parameter
+        stringstream inputStream(input);
+        // Get data from stream created from input parameter
+        inputStream >> dataInt;
+
         // Check for valid integer input
-        if (input.fail()) {
-            cout << "ERROR: Movie " << field <<" is not an number" << endl;
+        if (inputStream.fail()) {
+            cout << "ERROR: Movie " << field << ": " << input 
+                 <<" is not an number" << endl;
             this->title = "";
             return false;
         }
         
-        // Check for valid input
-        if (input.peek() == ',') {
-            input.ignore();
+        // Save valid data integer input if field
+        if (field == "Stock") {
+            // Set as stock
+            this->stockInStore = dataInt;
+        } else {
+            // Set as realese year
+            this->releaseYear = dataInt;
         }
-        
-        // Save valid data input
-        if (field == "Stock") this->stockInStore = dataInt;
-        else this->releaseYear = dataInt;
         return true;
 
-    } else if (field == "Director" || field == "Title") {
-        getline(input, dataString, ',');
-        
-        // Trim leading spaces and commas
-        remove(dataString.begin(), dataString.end(), ' ');
-        
+    } else if (field == "Director" || field == "Title") {  
         // Check for valid input
-        if (dataString == "") {
+        if (input == "") {
             cout << "ERROR: Empty " << field << " is not valid" << endl;
             this->title = "";
             return false;
         }
         
-        // Save valid data input
-        if (field == "Director") this->director = dataString;
-        else this->title = dataString;
+        // Save valid data string input if field
+        if (field == "Director") {
+            // Set as director
+            this->director = input;
+        } else {
+            // Set as title
+            this->title = input;
+        }
         return true;
 
     }

@@ -20,6 +20,9 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -28,12 +31,15 @@ class Movie {
         friend ostream& operator<<(ostream&, const Movie&);
 
     public:
-        //-------------------------------------------------Public member methods
+        //-------------------------------------------Constructors and Destructor
         // Constructor: Creates a Movie object and populates the genre, director
         // title, and releaseYear fields
         Movie();
         // Virtual destructor: Destroys the Movie object
-        virtual ~Movie();                                               //TODO remove. I don't think we need this
+        virtual ~Movie();
+        //-------------------------------------------------Public member methods
+        // Returns the movie format
+        char getFormat() const;
         // Returns the movie genre
         char getGenre() const;
         // Returns the movie director
@@ -44,6 +50,8 @@ class Movie {
         int getReleaseYear() const;
         // Returns how many copies of the movie are available in the store
         int getStockInStore() const;
+        // Sets the stock equal to the passed parameter
+        void setStock(int);
         // Increases the stock by 1
         bool increaseStock();
         // Decreases the stock by 1
@@ -62,6 +70,9 @@ class Movie {
 		virtual bool operator<(const Movie &) const = 0;
 
     protected:
+        //----------------------------------------------Protected member methods
+        // Error checker for Movie Constructors
+        bool checkValidInput(string&, const string&);
         // Genre of the movie
         char genre;
         // Director of the movie
@@ -69,13 +80,11 @@ class Movie {
         // Title of the movie
         string title;
         // Format that the movie is stored as
-        string format;
+        char format = 'D';
         // Year the movie was released
         int releaseYear;
         // How many copies of this movie are currently in the store
         int stockInStore;
-        // Error Helper for Constructor
-        bool checkValidInput(stringstream&, const string&);
 
 };
 
