@@ -12,6 +12,17 @@
 
 #include "borrow.h"
 
+/**
+ * printElement
+ * Helper method that allows for easy printing of elements at set intervals
+ * @param[in] Typename T: Data to be printed
+ * @param[in] int width: Width between next element on print line
+ */
+template<typename T> void printElement(T t, const int& width) {
+    const char separator = ' ';
+    cout << left << setw(width) << setfill(separator) << t;
+}
+
 //---------------------------------------------------Constructors and Destructor
 /**
  * Default Constructor: Populates the fields of the Borrow object by using the 
