@@ -10,21 +10,23 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
+#include <map>
+#include <sstream>
+#include <iomanip>
 #include "transaction.h"
 #include "../store/store.h"
 #include "../movie/movie.h"
 #include "../support/hashtable.h"
 #include "../support/bintree.h"
-#include <map>
-#include <sstream>
 
 using namespace std;
 
 class Inventory : public Transaction {
+    
     public:
         //-------------------------------------------------Public member methods
         // Constructor: Creates an empty Inventory object
-        Inventory(map<char, BinTree>&);
+        Inventory(map<char, BinTree*>&);
         // Destructor: Deletes the Inventory object
         virtual ~Inventory();
         // Prints the Store's inventory according to the specified requirements 
@@ -34,7 +36,8 @@ class Inventory : public Transaction {
     private:
         //-------------------------------------------------Private member fields
         // All available movies in the Store
-        map<char, BinTree> inventory;
+        map<char, BinTree*> inventory;
+
 };
 
 #endif
