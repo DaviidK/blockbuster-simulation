@@ -20,58 +20,67 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
 class Movie {
 
-    virtual friend ostream& operator<<(ostream&, const Movie&);
+        friend ostream& operator<<(ostream&, const Movie&);
 
     public:
-        //-------------------------------------------------Public member methods
+        //-------------------------------------------Constructors and Destructor
         // Constructor: Creates a Movie object and populates the genre, director
         // title, and releaseYear fields
-        Movie(string);
+        Movie();
         // Virtual destructor: Destroys the Movie object
         virtual ~Movie();
+        //-------------------------------------------------Public member methods
+        // Returns the movie format
+        char getFormat() const;
         // Returns the movie genre
-        string getGenre();
+        char getGenre() const;
         // Returns the movie director
-        string getDirector();
+        string getDirector() const;
         // Returns the movie title
-        string getTitle();
+        string getTitle() const;
         // Returns the movie release year
-        int getReleaseYear();
+        int getReleaseYear() const;
         // Returns how many copies of the movie are available in the store
-        int getStockInStore();
+        int getStockInStore() const;
+        // Sets the stock equal to the passed parameter
+        void setStock(int);
         // Increases the stock by 1
-        void increaseStock();
+        bool increaseStock();
         // Decreases the stock by 1
-        void decreaseStock();
+        bool decreaseStock();
         // Will compare this Movie object to the passed parameter Movie object.
         // Returns 1 if this is greater than the parameter, -1 if this is less 
         // than the parameter, and 0 if the two Movies are equal. 
-        virtual int compareTo(Movie);
-        // Overloads the = comparison operator
-        Movie& operator=(const Movie &);
+        virtual int compareTo(const Movie &) const = 0;
         // Overloads the == comparison operator
-		bool operator==(const Movie &) const;
+		virtual bool operator==(const Movie &) const = 0;
         // Overloads the != comparison operator
-		bool operator!=(const Movie &) const;
+		virtual bool operator!=(const Movie &) const = 0;
         // Overloads the > comparison operator
-        bool operator>(const Movie &) const;
+        virtual bool operator>(const Movie &) const = 0;
         // Overloads the < comparison operator
-		bool operator<(const Movie &) const;
+		virtual bool operator<(const Movie &) const = 0;
 
     protected:
+        //----------------------------------------------Protected member methods
+        // Error checker for Movie Constructors
+        bool checkValidInput(string&, const string&);
         // Genre of the movie
-        string genre;
+        char genre;
         // Director of the movie
         string director;
         // Title of the movie
         string title;
         // Format that the movie is stored as
-        string format;
+        char format = 'D';
         // Year the movie was released
         int releaseYear;
         // How many copies of this movie are currently in the store
