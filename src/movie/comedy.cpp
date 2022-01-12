@@ -9,66 +9,89 @@
 //     genre(string) stock(int) director(string) title(string) releaseYear(int)
 
 #include "comedy.h"
-#include <sstream>
 
 //---------------------------------------------------Constructors and Destructor
 /**
- * Default Constructor
+ * Constructor
  * Creates a Comedy object and populates the genre, title, director, 
  * and releaseYear fields
- * @param[in] string input: containing all fields
+ * @param[in] string input : containing all fields
  */
-Comedy::Comedy(string input) {
+Comedy::Comedy(string input) : Movie() {
+    // Set genre to Comedy (F)
     this->genre = 'F';
     
     // Place data from passed input into stringstream
     stringstream inputStream(input);
+    string dataString;
 
     // Get stock info from input
-    if (!this->checkValidInput(inputStream, "Stock")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Stock")) {
         return;
     }
 
     // Get director from input
-    if (!this->checkValidInput(inputStream, "Director")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Director")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Title")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Title")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Year")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Year")) {
         return;
     }
 }
 
-Comedy::Comedy(char, string input) {
+/**
+ * Constructor
+ * Creates a Comedy object and populates the genre, title, director, 
+ * and releaseYear fields
+ * @param[in] char genre : movie genre
+ * @param[in] string input : containing all fields after genre
+ */
+Comedy::Comedy(char, string input) : Movie() {
+    // Set genre to Comedy (F)
     this->genre = 'F';
 
     // Place data from passed input into stringstream
     stringstream inputStream(input);
-
+    string dataString;
+    
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Title")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Title")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Year")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Year")) {
         return;
     }
 }
 
-//---------------------------------------------------------Public Data Accessors
+/**
+ * virtual Destructor
+ * Destroys the Drama object
+ */
+Comedy::~Comedy() {}
+
+//---------------------------------------------------------Public member methods
 /**
  * public virtual compareTo
  * Will compare this Comedy object to the passed parameter Comedy object
  * Returns 1 if this is greater than the parameter, -1 if this is less
  * than the parameter, and 0 if the two Movies are equal.
- * @param[in] Comedy: Movie object to be compared with this object
+ * @param[in] Movie : Movie object to be compared with this object
+ * @return int : -1 (<), 0 (==), or 1 (>)
  */
 int Comedy::compareTo(const Movie& movie) const {
     if (*this == movie) {
@@ -80,31 +103,14 @@ int Comedy::compareTo(const Movie& movie) const {
     }
 }
 
-//---------------------------------------------------------Overloaded Operations
-/**
- * Overloads the ostream << operator
- * Prints the Movie details and stock
- * Output example: 
- * "TODO"
- * @param[out] ostream output;
- * @param[in] Comedy movie: details to displayed
- */
-ostream& operator<<(ostream& output, const Comedy& movie){
-    output << "Stock: " << movie.getStockInStore()
-           << "; Title: " << movie.getTitle()
-           << "; Director: " << movie.getDirector()
-           << "; Release Year: " << movie.getReleaseYear() << endl;
-    // return ostream&
-    return output;
-}
-
 /**
  * Overloads the == comparison operator
- * Compares each field for Comedy given in parameter
- * @param[in] Comedy movie: left hand side of operation
- * @return boolean: == comparison result
+ * Compares Title then the Release Year of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : == comparison result
  */
 bool Comedy::operator==(const Movie& movie) const {
+    // Compare Title and Release Year
     if (this->title.compare(movie.getTitle()) == 0 &&
         this->releaseYear == movie.getReleaseYear()) {
             return true;
@@ -115,9 +121,9 @@ bool Comedy::operator==(const Movie& movie) const {
 
 /**
  * Overloads the != comparison operator
- * Compares each field for Comedy given in parameter
- * @param[in] Comedy movie: left hand side of operation
- * @return boolean: != comparison result
+ * Compares Title then the Release Year of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : != comparison result
  */
 bool Comedy::operator!=(const Movie& movie) const {
     return !(*this == movie);
@@ -125,9 +131,9 @@ bool Comedy::operator!=(const Movie& movie) const {
 
 /**
  * Overloads the > comparison operator
- * Compares Director then Title of this to Comedy given in rhs
- * @param[in] Comedy movie: left hand side of operation
- * @return boolean: > comparison result
+ * Compares Title then the Release Year of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : > comparison result
  */
 bool Comedy::operator>(const Movie& movie) const {
     // First level of comparison
@@ -135,8 +141,8 @@ bool Comedy::operator>(const Movie& movie) const {
     // Second level of comparison
     bool compare2 = this->releaseYear > movie.getReleaseYear();
     
-    // If first level is >, return true.
-    // If first level is ==, then look at 2nd level.
+    // If first level is >, return true, else if first level is ==,
+    // then compare at 2nd level
     if (compare1 > 0) {
         return true;
     } else if (compare1 == 0 && compare2) {
@@ -148,9 +154,9 @@ bool Comedy::operator>(const Movie& movie) const {
 
 /**
  * Overloads the < comparison operator
- * Compares each field for Comedy given in parameter
- * @param[in] Comedy movie: left hand side of operation
- * @return boolean: < comparison result
+ * Compares Title then the Release Year of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : < comparison result
  */
 bool Comedy::operator<(const Movie& movie) const {
     return !(*this > movie) && *this != movie;
