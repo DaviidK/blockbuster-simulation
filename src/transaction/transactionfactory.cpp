@@ -12,62 +12,79 @@
 
 #include "transactionfactory.h"
 
+/**
+ * printElement
+ * Helper method that allows for easy printing of elements at set intervals
+ * @param[in] Typename T: Data to be printed
+ * @param[in] int width: Width between next element on print line
+ */
+template<typename T> void printElement(T t, const int& width) {
+    const char separator = ' ';
+    cout << left << setw(width) << setfill(separator) << t;
+}
+
 //----------------------------------------------------------Public member method
 /**
- * createTransaction: Will parse through passed parameter information to 
-   determine which type of Transaction object to create and return
- * @param[string&]: Input data to be parsed
- * @param[map<char, BinTree>&]: All movies contained in the store
- * @param[HashTable<Customer>&]: All customers of the store
+ * public createTransaction
+ * Will parse through passed parameter information to
+ * determine which type of Transaction object to create and return
+ * @param[in] string : Input data to be parsed
+ * @param[in] map<char, BinTree> : All movies contained in the store
+ * @param[in] HashTable<Customer> : All customers of the store
 */
-Transaction* createTransaction(string input,
-                              map<char, BinTree>& inventory,
+Transaction* TransactionFactory::createTransaction(string input,
+                              map<char, BinTree*>& inventory,
                               HashTable<Customer>& customers) {
     // Place data from passed input into stringstream
-    stringstream inputStream; 
-    inputStream << input;
+    stringstream inputStream(input);
 
     // Pull the first character of the passed string to determine the type of
     // Transaction object to be created
-    char transType;
+    char transType = ' ';
     inputStream >> transType;
+
+    string restOfLine;
+    getline(inputStream, restOfLine);
 
     // Create a Transaction object and instantiate it according to the character
     // found in input. For each type of Transaction, return NULL if object
     // instantiated was invalid
-    Transaction* t;
+    Transaction* t = NULL;
     switch (transType) {
         case 'B': {
-            t = new Borrow(inputStream, inventory, customers);
+            t = new Borrow(restOfLine, inventory, customers);
             Borrow* b = static_cast<Borrow*>(t);
             if (b->getMovie() == NULL || b->getCustomer() == NULL) {
-                return NULL;
+                delete t;
+                t = NULL;
             }
-            return b;
+            break;
         }
         case 'H': {
-            t = new History(inputStream, customers);
+            t = new History(restOfLine, customers);
             History* h = static_cast<History*>(t);
             if (h->getCustomer() == NULL) {
-                return NULL;
+                delete t;
+                t = NULL;
             }
-            return h;
+            break;
         }
         case 'I': { 
             t = new Inventory(inventory);
-            return t; 
+            break; 
         }
         case 'R': {
-            t = new Return(inputStream, inventory, customers);
+            t = new Return(restOfLine, inventory, customers);
             Return* r = static_cast<Return*>(t);
             if (r->getMovie() == NULL || r->getCustomer() == NULL) {
-                return NULL;
+                delete t;
+                t = NULL;
             }
-            return r;
+            break;
         }
         default:
-            cout << "ERROR: Transaction type \"" << transType 
-            << "\" is not valid";
-            return NULL;
+            printElement("Invalid transaction label", 55);
+            printElement(transType, 30);
     }
+    return t;
 }
