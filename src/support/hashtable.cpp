@@ -8,111 +8,115 @@
 // Assumptions:
 //  - This Hashtable stores a given key-value pairs, where key is always an int.
 
-#include "hashtable.h"
-
 //---------------------------------------------------Constructors and Destructor
-
 /**
  * Default Constructor
  * Creates an empty Hashtable and sets the size to 0, if size is not given.
- * Preconditions: NONE
- * Postconditions: Hashtable (empty) is created, data is NULL
  */
-template<typename Value> 
-HashTable<Value>::HashTable(int size) : size(size) {
-    // Setting the array of Nodes containing data to NULL
-    Node* data[size];
-}						
+template<class Value> 
+HashTable<Value>::HashTable() {
+    for (int i = 0; i < this->ARRAY_SIZE; i++) {
+        this->nodeArray[i] = new Node();
+    }
+}	
 
 /**
  * Destructor
  * Deallocates dynamically allocated memories
- * Preconditions: NONE
- * Postconditions: Hashtable becomes empty and value becomes NULL
  */
-template<typename Value> 
+template<class Value> 
 HashTable<Value>::~HashTable() {
-    
+    for (int i = 0; i < this->ARRAY_SIZE; i++) {
+        delete this->nodeArray[i];
+        this->nodeArray[i] = NULL;
+    }
 }
 
 //---------------------------------------------------------Public member methods
 /**
  * public insert
- * Inserts a new object of given value at the passed Key location
- * Preconditions: NONE
- * Postconditions: Value is inserted
- * @param[in] int key: Key of the object stored
- * @param[in] Value value: the object to be stored
+ * Inserts a new object of given value at the passed key location
+ * @param[in] int key : Key of the object stored
+ * @param[in] Value value : Value the object to be stored
  */
-template<typename Value> 
-void HashTable<Value>::insert(const int& key, const Value*& value) {
+template<class Value> 
+void HashTable<Value>::insert(const int& key, Value*& value) {
     // Finds the index for storing data
     int index = this->hash(key);
     // Inserts the key and value to table
-    this->data[index]->value = new Node(key, value, this->data[index]);
-}
-
-
-/**
- * public remove
- * Remove an object at the passed Key location
- * If the Object does not exist, Print out a message
- * Preconditions: NONE
- * Postconditions: Value is removed
- * @param[in] int key: Key of the object to be removed
- */
-template<typename Value> 
-bool HashTable<Value>::remove(const int& key) {
-    //TODO Implement Remove
+    this->nodeArray[index] = new Node(key, value, this->nodeArray[index]);
 }
 
 /**
  * public retrieve
  * Retrieves the object present at the passed Key location
- * If the Object does not exist, return NULL
- * Preconditions: NONE
- * Postconditions: NONE
- * @param[in] int key: Key of the object to be retrieved
+ * If the Object does not exist, sets foundData parameter to NULL
+ * @param[in] int searchKey : Key of the object to be retrieved
+ * @param[out] Value* foundData : Saves the pointer to this object if found
  */
-template<typename Value> 
+template<class Value> 
 bool HashTable<Value>::retrieve(const int& searchKey, Value*& foundData) const {
-    // Find the index to put the insterted data in
+    // Set foundData to NULL
+    foundData = NULL;
+    
+    // Find the array index to put the inserted data in
     int index = this->hash(searchKey);
     
-    Node* current = data[index];
+    // Saves the first Node at index
+    Node* current = this->nodeArray[index];
     
-    while (current != NULL) {
+    // checks for the all nodes at index to find value of searchKey
+    while (current->key != INT_MIN) {
+        // If key is found
         if(current->key == searchKey) {
-            // Save data to foundData param
+            // Save value to foundData param
             foundData = current->value;
             return true;
         }
-        // Point to next node
+        // Move to next node at index
         current = current->next;
     }
     
+    // Key not found
     return false;  
 }
 
 //--------------------------------------------------------Private member methods
 /**
  * private hash
- * Hashing function: Takes in a Key and returns the hashed index
- * Preconditions: HashTable size should not be 0.
- * Postconditions: NONE
- * @param[in] int key: Key of the object to be hashed
+ * Takes in a key and returns the hashed index
+ * @param[in] int key : Key of the object to be hashed
+ * @return int : hashed index
  */
-template<typename Value> 
+template<class Value> 
 int HashTable<Value>::hash(const int& key) const {
-    return key % size;
+    return key % this->ARRAY_SIZE;
 }
 
-// -----------------------------------------------------------------Node methods
+// ---------------------------------------------------------Private Node methods
 /**
 * Constructor for private Struct Node
-* @param[in] Value* data: sets coeff value
+* @param[in] Value* v: sets coeff value
 */
-template<typename Value> 
-HashTable<Value>::Node::Node(int k, Value* d, Node* n) : key(k), 
-                                                         data(d), 
+template<class Value> 
+HashTable<Value>::Node::Node(int k, Value* v, Node* n) : key(k), 
+                                                         value(v), 
                                                          next(n) {}
+
+/**
+* Destructor for private Struct Node
+*/
+template<class Value>
+HashTable<Value>::Node::~Node() {
+    // Delete value if not the empty end node
+    if(this->key != INT_MIN) {
+        delete this->value;
+        this->value = NULL;
+    }
+
+    // Check and delete next node 
+    if (this->next != NULL) {
+        delete this->next;
+        this->next = NULL;
+    }
+}
