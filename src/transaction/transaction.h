@@ -27,11 +27,13 @@ class Transaction {
         // Using the type of Transaction object that is instantiated, determine 
         // and conduct the necessary action
         virtual void doTransaction() const;
+        // Returns transaction type
         string getTransactionType() const;
 
     protected:
         // String representing the type of transaction
-        string transactionType; 
+        string transactionType;
+
 };
 
 #endif
