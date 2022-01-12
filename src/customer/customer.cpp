@@ -10,3 +10,55 @@
 //      customerID# (int) lastName (string) firstName (string)
 
 #include "customer.h"
+
+//---------------------------------------------------Constructors and Destructor
+/**
+ * Default Constructor: Creates an empty Customer object
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::Customer() {
+    this->customerID = -1;
+    this->firstName = "";
+    this->lastName = "";
+    this->transactionHistory.reserve(1);
+}
+
+/**
+ * string Constructor: Takes in data from passed parameter string and 
+   instantiates Customer fields accordingly
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::Customer(string data) {
+    this->customerID << data;
+    this->lastName << data;
+    this->firstName << data;
+    this->transactionHistory.reserve(1);
+}
+
+/**
+ * Destructor: Destroys a Customer object
+ * @param[in]: None
+ * @return[out]: None
+*/
+Customer::~Customer() {}
+
+//---------------------------------------------------------Public member methods
+/**
+ * getHistory: Returns the transactionHistory field of this
+ * @param[in]: None
+ * @return[out]: None
+*/
+vector<Transaction> Customer::getHistory() const {
+     return this->transactionHistory; 
+}
+
+/**
+ * Adds a Transaction object to the end of the transactionHistory field
+ * @param[in]: None
+ * @return[out]: None
+*/
+void Customer::addToHistory(Transaction t) {
+	transactionHistory.push_back(t);
+}
