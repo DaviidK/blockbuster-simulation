@@ -11,31 +11,48 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-using namespace std;
+#include <cstddef>
+#include <climits>
 
 template<class Value> 
 class HashTable {
 
     public:
-        // Constructor: Will create an empty HashTable object
+        //-------------------------------------------Constructors and Destructor
+        // Constructor: Creates an empty HashTable object
         HashTable();
-        // Destructor: Will delete the HashTable object
+        // Destructor: Deletes the HashTable object
         ~HashTable();
+        //-------------------------------------------------Public member methods
         // Inserts a new object at the passed Key location
-        void insert(const int&, const Value&);
-        // Removes the object contained in the passed Key location
-        void remove(const int&);
+        void insert(const int&, Value*&);
         // Retrieves the object present at the passed Key location
-        Value* retrieve(const int&) const;
+        // returning Object pointer to Value parameter
+        bool retrieve(const int&, Value*&) const;
 
-    private: 
-        // Array that holds the data
-        Value* data;
-        // Array size
-        int size;
+    private:
+        //------------------------------------------------Private member methods
         // Hashing function: Takes in a Key and returns the hashed index
         int hash(const int&) const;
-
+        // Node Struct to store Key, Value and Next Node
+        struct Node {
+            // Node constructor with NULL as Next pointer default value
+            Node(int=INT_MIN, Value* = NULL, Node* = NULL);
+            // Node destructor
+            ~Node();
+            // Pointer to the Key
+            int key;
+            // Pointer to the Value
+            Value* value;
+            // Pointer to the next Node
+            Node* next;
+        };
+        // Constant array size 
+        static const int ARRAY_SIZE = 503;
+        // Array that holds the Node
+        Node* nodeArray[ARRAY_SIZE];
+        
 };
 
+#include "hashtable.cpp"
 #endif
