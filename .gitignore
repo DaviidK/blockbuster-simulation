@@ -1,3 +1,6 @@
+#----File locks----#
+*.~lock*
+
 # Prerequisites
 *.d
 
@@ -6,6 +9,7 @@
 *.lo
 *.o
 *.obj
+*.out
 
 # Precompiled Headers
 *.gch
