@@ -12,7 +12,13 @@
 #ifndef MOVIEFACTORY_H
 #define MOVIEFACTORY_H
 
+#include <sstream>
+#include <algorithm>
+#include <iomanip>
 #include "movie.h"
+#include "classics.h"
+#include "comedy.h"
+#include "drama.h"
 
 using namespace std;
 

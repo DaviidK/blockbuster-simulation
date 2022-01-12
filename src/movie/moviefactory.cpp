@@ -16,7 +16,20 @@
 #include <sstream>
 #include <algorithm>
 
-//---------------------------------------------------Constructors and Destructor
+#include "moviefactory.h"
+
+/**
+ * printElement
+ * Helper method that allows for easy printing of elements at set intervals
+ * @param[in] Typename T: Data to be printed
+ * @param[in] int width: Width between next element on print line
+ */
+template<typename T> void printElement(T t, const int& width) {
+    const char separator = ' ';
+    cout << left << setw(width) << setfill(separator) << t;
+}
+
+//---------------------------------------------------------Public member methods
 /**
  * public createMovie
  * Instantiates the appropriate type of movie based on the given
@@ -29,78 +42,59 @@ Movie* MovieFactory::createMovie(string input) {
 
     // Pull the first character of the passed string to determine the type of
     // Movie object to be created
-    string movieGenre;
-    inputStream >> movieGenre;
-    // trim leading spaces and commas
-    remove(movieGenre.begin(), movieGenre.end(), ' ');
-    remove(movieGenre.begin(),movieGenre.end(), ',');
+    string token;
+    inputStream >> token;
+    char movieGenre = token.at(0);
 
-    // check for none char input
-    if (movieGenre.size() != 1) {
-        cout << "ERROR: Movie genre \"" << movieGenre << "\" is not valid" 
-             << endl;
-        return NULL;
-    }
+    string restOfLine;
+    getline(inputStream, restOfLine);
 
     // Create a Movie object and instantiate it according to the character
     // found in input.
-    Movie* m;
-    switch (movieGenre.at(0)) {
+    Movie* m = NULL;
+    switch (movieGenre) {
         case 'C':
-            m = new Classics(inputStream.str());
-            if (m->getTitle() == "") {
-                return NULL;
-            }
+            m = new Classics(restOfLine);
             break;
         case 'F':
-            m = new Comedy(inputStream.str());
-            if (m->getTitle() == "") {
-                return NULL;
-            }
+            m = new Comedy(restOfLine);
             break;
         case 'D':
-            m = new Drama(inputStream.str());
-            if (m->getTitle() == "") {
-                return NULL;
-            }
+            m = new Drama(restOfLine);
             break;
         default:
-            cout << "ERROR: Movie genre \"" << movieGenre << "\" is not valid"
-                 << endl;
-            return NULL;
+            printElement("Invalid genre", 40);
+            printElement(movieGenre, 20);
     }
 
     return m;
 }
 
+/**
+ * public createMovie
+ * Instantiates the appropriate type of movie based on the given
+ * genre parameter
+ * @param[in] char genre : contains all fields
+ * @param[in] string input : contains all fields
+ */
 Movie* MovieFactory::createMovie(char genre, string input) {
 
     // Create a Movie object and instantiate it according to the character
     // found in input.
-    Movie* m;
+    Movie* m = NULL;
     switch (genre) {
         case 'C':
             m = new Classics(genre, input);
-            if (m->getTitle() == "") {
-                return NULL;
-            }
             break;
         case 'F':
             m = new Comedy(genre, input);
-            if (m->getTitle() == "") {
-                return NULL;
-            }
             break;
         case 'D':
             m = new Drama(genre, input);
-            if (m->getTitle() == "") {
-                return NULL;
-            }
             break;
         default:
-            cout << "ERROR: Movie genre \"" << genre << "\" is not valid"
-                 << endl;
-            return NULL;
+            printElement("Invalid genre", 55);
+            printElement(genre, 30);
     }
 
     return m;
