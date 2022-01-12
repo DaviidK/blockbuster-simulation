@@ -12,29 +12,33 @@
 #ifndef BORROW_H
 #define BORROW_H
 
+#include <map>
+#include <sstream>
+#include <iomanip>
 #include "transaction.h"
 #include "../movie/movie.h"
 #include "../customer/customer.h"
 #include "../support/hashtable.h"
 #include "../support/bintree.h"
 #include "../movie/moviefactory.h"
-#include <map>
-#include <sstream>
 
 using namespace std;
 
 class Borrow : public Transaction {
+
     public:
         //-------------------------------------------------Public member methods
         // Constructor: Will create a Borrow object and populate the m and c
         // fields based on passed data
-        Borrow(stringstream&, map<char, BinTree>&, HashTable<Customer>&);
+        Borrow(string&, map<char, BinTree*>&, HashTable<Customer>&);
         // Destructor: Will destroy the Borrow object
         virtual ~Borrow();
         // Will decrement the stock of a movie and log the Borrow Transaction in
         // the Customer's history field
         virtual void doTransaction() const;
+        // Returns the movie
         Movie* getMovie() const;
+        // Returns the customer
         Customer* getCustomer() const;
 
     private:
@@ -43,6 +47,7 @@ class Borrow : public Transaction {
         Movie* movie;
         // Pointer to the Customer object associated with this transaction
         Customer* customer;
+
 };
 
 #endif
