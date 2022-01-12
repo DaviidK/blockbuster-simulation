@@ -12,22 +12,22 @@
 #define DRAMA_H
 
 #include "movie.h"
+#include <sstream>
 
 using namespace std;
 
 class Drama: public Movie {
     
-        friend ostream& operator<<(ostream&, const Drama&);
-
     public:
-        //-------------------------------------------------Public member methods
+        //-------------------------------------------Constructors and Destructor
         // Constructor: Creates a Drama object and populates the genre, title,
         // director, and releaseYear fields
         Drama(string);
         Drama(char, string);
         // Virtual destructor: Destroys the Drama object
         virtual ~Drama();
-        // Compares this object to other Drama objects
+        //-------------------------------------------------Public member methods
+        // Compares this object to other Movie objects
         virtual int compareTo(const Movie &) const;
         // Overloads the == comparison operator
 		virtual bool operator==(const Movie &) const;
@@ -40,4 +40,4 @@ class Drama: public Movie {
 
 };
 
-#endiff
+#endif

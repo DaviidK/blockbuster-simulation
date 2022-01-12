@@ -9,67 +9,93 @@
 //     genre(string) stock(int) director(string) title(string) releaseYear(int)
 
 #include "drama.h"
-#include <sstream>
 
 //---------------------------------------------------Constructors and Destructor
 /**
- * Default Constructor
+ * Constructor
  * Creates a Drama object and populates the genre, title,
  * director, and releaseYear fields
- * @param[in] string input: containing all fields
+ * @param[in] string input : containing all fields
  */
-Drama::Drama(string input) {
+Drama::Drama(string input) : Movie() {
+    // Set genre to Drama (D)
     this->genre = 'D';
     
     // Place data from passed input into stringstream
     stringstream inputStream(input);
+    
+    // Temporary variable
+    string dataString;
 
     // Get stock info from input
-    if (!this->checkValidInput(inputStream, "Stock")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Stock")) {
         return;
     }
 
     // Get director from input
-    if (!this->checkValidInput(inputStream, "Director")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Director")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Title")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Title")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Year")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Year")) {
         return;
     }
 }
 
-Drama::Drama(char, string input) {
+/**
+ * Constructor
+ * Creates a Drama object and populates the genre, title,
+ * director, and releaseYear fields
+ * @param[in] char genre : movie genre
+ * @param[in] string input : containing all fields after genre
+ */
+Drama::Drama(char, string input) : Movie() {
+    // Set genre to Drama (D)
     this->genre = 'D';
 
     // Place data from passed input into stringstream
     stringstream inputStream(input);
     
+    // Temporary variable
+    string dataString;
+    
     // Get director from input
-    if (!this->checkValidInput(inputStream, "Director")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Director")) {
         return;
     }
 
     // Get title from input
-    if (!this->checkValidInput(inputStream, "Title")) {
+    getline(inputStream, dataString, ',');
+    if (!this->checkValidInput(dataString, "Title")) {
         return;
     }
 }
 
-//---------------------------------------------------------Public Data Accessors
+/**
+ * virtual Destructor
+ * Destroys the Drama object
+ */
+Drama::~Drama() {}
 
+//---------------------------------------------------------Public member methods
 /**
  * public virtual compareTo
- * Will compare this Drama object to the passed parameter Drama object
+ * Will compare this Drama object to the passed parameter Movie object
  * Returns 1 if this is greater than the parameter, -1 if this is less
  * than the parameter, and 0 if the two Movies are equal.
- * @param[in] Drama: Movie object to be compared with this object
+ * @param[in] Movie : Movie object to be compared with this object
+ * @return int : -1 (<), 0 (==), or 1 (>)
  */
 int Drama::compareTo(const Movie& movie) const {
     if (*this == movie) {
@@ -81,31 +107,14 @@ int Drama::compareTo(const Movie& movie) const {
     }
 }
 
-//---------------------------------------------------------Overloaded Operations
-/**
- * Overloads the ostream << operator
- * Prints the Movie details and stock
- * Output example: 
- * "TODO"
- * @param[out] ostream output;
- * @param[in] Drama movie: details to displayed
- */
-ostream& operator<<(ostream& output, const Drama& movie){
-    output << "Stock: " << movie.getStockInStore()
-           << "; Title: " << movie.getTitle()
-           << "; Director: " << movie.getDirector()
-           << "; Release Year: " << movie.getReleaseYear() << endl;
-    // return ostream&
-    return output;
-}
-
 /**
  * Overloads the == comparison operator
- * Compares each field for Drama given in parameter
- * @param[in] Drama movie: left hand side of operation
- * @return boolean: == comparison result
+ * Compares Director then Title of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : == comparison result
  */
 bool Drama::operator==(const Movie& movie) const {
+    // Compare Director and Title 
     if (this->director.compare(movie.getDirector()) == 0 &&
         this->title.compare(movie.getTitle()) == 0) {
             return true;
@@ -116,9 +125,9 @@ bool Drama::operator==(const Movie& movie) const {
 
 /**
  * Overloads the != comparison operator
- * Compares each field for Drama given in parameter
- * @param[in] Drama movie: left hand side of operation
- * @return boolean: != comparison result
+ * Compares Director then Title of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : != comparison result
  */
 bool Drama::operator!=(const Movie& movie) const {
     return !(*this == movie);
@@ -126,18 +135,18 @@ bool Drama::operator!=(const Movie& movie) const {
 
 /**
  * Overloads the > comparison operator
- * Compares Director then Title of this to Drama given in rhs
- * @param[in] Drama movie: left hand side of operation
- * @return boolean: > comparison result
+ * Compares Director then Title of this to Movie given in rhs
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : > comparison result
  */
-bool Drama::operator>(const Movie& movie) const {
+bool Drama::operator>(const Movie& movie) const { 
     // First level of comparison
     int compare1 = this->director.compare(movie.getDirector());
     // Second level of comparison
     int compare2 = this->title.compare(movie.getTitle());
     
-    // If first level is >, return true.
-    // If first level is ==, then look at 2nd level.
+    // If first level is >, return true, else if first level is ==,
+    // then compare at 2nd level
     if (compare1 > 0) {
         return true;
     } else if (compare1 == 0 && compare2 > 0) {
@@ -149,9 +158,9 @@ bool Drama::operator>(const Movie& movie) const {
 
 /**
  * Overloads the < comparison operator
- * Compares each field for Drama given in parameter
- * @param[in] Drama movie: left hand side of operation
- * @return boolean: < comparison result
+ * Compares Director then Title of this to Movie given in parameter
+ * @param[in] Movie movie : right hand side of operation
+ * @return boolean : < comparison result
  */
 bool Drama::operator<(const Movie& movie) const {
     return !(*this > movie) && *this != movie;
