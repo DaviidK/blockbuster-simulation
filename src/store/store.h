@@ -27,6 +27,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <iomanip>
 #include "../support/bintree.h"
 #include "../support/hashtable.h"
 #include "../customer/customer.h"
@@ -47,32 +48,37 @@ using namespace std;
 class Store {
 
     public:
-        //-------------------------------------------------Public member methods
-        // Constructor: Will populate the storeName, inventory, and customers
-        // fields, while instantiating the transaction field as an empty list
+        //-----------------------------------------------------------Constructor
+        // Constructor: Will populate the storeName field
         Store(string);
+        // Destructor: Destroys a Store object by de-allocating the customers, 
+        // transactions, and movies fields
         ~Store();
         // Will fill the inventory field based on data from input an file
         void populateInventory(ifstream&);
         // Will fill the customers field based on data from input an file
         void populateCustomers(ifstream&);
         // Will fill the transactions field based on data from an input file
-        void readTransactions(ifstream&);
+        void populateCommands(ifstream&);
         // Will execute all transactions stored in the transactions field
-        void executeTransactions();
+        void executeCommands();
 
     private:
-        //-------------------------------------------------Private member fields
+        //------------------------------------------------Private member methods
         // Name of the store
         string storeName;
         // All available movies
-        map<char, BinTree> inventory;
+        map<char, BinTree*> inventory;
+        // Movie container
+        list<BinTree*> movies;
         // All the customers of the Store
         HashTable<Customer> customers;
         // All valid transactions that are read in from input file
         list<Transaction*> transactions;
-        //------------------------------------------------Private member methods
-        
+        // Helper method that ensures Return transactions can only be created if
+        // the customer had already borrowed the same movie
+        bool validReturn(Transaction*);
+
 };
 
 #endif
