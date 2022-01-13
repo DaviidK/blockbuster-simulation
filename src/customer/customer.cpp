@@ -13,52 +13,62 @@
 
 //---------------------------------------------------Constructors and Destructor
 /**
- * Default Constructor: Creates an empty Customer object
- * @param[in]: None
- * @return[out]: None
-*/
-Customer::Customer() {
-    this->customerID = -1;
-    this->firstName = "";
-    this->lastName = "";
-    this->transactionHistory.reserve(1);
+ * Constructor
+ * Creates a Customer Object using the given input parameter.
+ * @param[in] string input : with format <customerID#> <lastName> <firstName>
+ */
+Customer::Customer(string input) {
+    stringstream data(input);
+    data >> this->customerID;
+    if (data.fail()) {
+        this->customerID = -1; 
+        this->lastName = "";
+        this->firstName = "";
+        return;
+    }
+    data >> this->lastName;
+    data >> this->firstName;
 }
 
 /**
- * string Constructor: Takes in data from passed parameter string and 
-   instantiates Customer fields accordingly
- * @param[in]: None
- * @return[out]: None
-*/
-Customer::Customer(string data) {
-    this->customerID << data;
-    this->lastName << data;
-    this->firstName << data;
-    this->transactionHistory.reserve(1);
-}
-
-/**
- * Destructor: Destroys a Customer object
- * @param[in]: None
- * @return[out]: None
-*/
+ * Destructor
+ * Destroys a Customer object.
+ */
 Customer::~Customer() {}
 
 //---------------------------------------------------------Public member methods
 /**
- * getHistory: Returns the transactionHistory field of this
- * @param[in]: None
- * @return[out]: None
-*/
-vector<Transaction> Customer::getHistory() const {
-     return this->transactionHistory; 
+ * public getCustomerID
+ * Returns the customerID field
+ * @return int : Customer ID
+ */
+int Customer::getCustomerID() const {
+    return this->customerID; 
 }
 
 /**
+ * public getCustomerName
+ * Returns the fistName and lastName fields combined
+ * @return int : Customer ID
+ */
+string Customer::getCustomerName() const {
+    return this->firstName + " " + this->lastName; 
+}
+
+/**
+ * public getCustomerID
+ * Returns the customerID field
+ * @return vector<const Transaction*> : List of Customer Transactions
+ */
+vector<const Transaction*> Customer::getTransactionHistory() const {
+    return this->transactionHistory; 
+}
+
+/**
+ * public addToHistory
  * Adds a Transaction object to the end of the transactionHistory field
- * @param[in]: None
- * @return[out]: None
+ * @param[in] Transaction* t : To be added to Customer Transaction 
 */
-void Customer::addToHistory(Transaction t) {
-	transactionHistory.push_back(t);
+void Customer::addToHistory(const Transaction* t) {
+    this->transactionHistory.push_back(t);
 }
