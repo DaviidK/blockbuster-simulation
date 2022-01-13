@@ -8,15 +8,16 @@
 // Assumptions:
 //  - Input provided to the constructor will be given in the form of: 
 //      customerID# (int) lastName (string) firstName (string)
+
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
-#include "../support/hashtable.h"
-#include "../movie/movie.h"
-#include "../transaction/transaction.h"
 #include <string>
 #include <vector>
 #include <sstream>
+#include "../support/hashtable.h"
+#include "../movie/movie.h"
+#include "../transaction/transaction.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ class Customer {
     public:
         //-------------------------------------------------Public member methods
         // Default constructor: Creates an empty Customer object
-        Customer();
+        // Customer();
         // Constructor: Will populate the customerID, firstName, and lastName 
         // fields after parsing through the passed input string
         Customer(string);
@@ -33,12 +34,12 @@ class Customer {
         ~Customer();
         // Returns the customerID field
         int getCustomerID() const;
+        // Returns the name of the customer (first and last combine)
+        string getCustomerName() const;
         // Returns the transactionHistory field
-        vector<Transaction> getTransactionHistory() const;
+        vector<const Transaction*> getTransactionHistory() const;
         // Adds a Transaction object to the transactionHistory field
-        void addToHistory(const Transaction&);
-
-        void printHistory() const;
+        void addToHistory(const Transaction*);
         
     private:
         //-------------------------------------------------Private member fields
@@ -50,7 +51,7 @@ class Customer {
         string lastName;
         //------------------------------------------------Private member methods
         // All transactions from this customer
-        vector<Transaction> transactionHistory;
+        vector<const Transaction*> transactionHistory;
         
 };
 
