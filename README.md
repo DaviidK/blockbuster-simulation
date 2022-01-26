@@ -10,4 +10,8 @@ Customers in this will be stored with a first and last name, as well as a four-d
 
 ### Actions
 When simulating activity, four different actions will be permitted in this program: 
-1. Borrowing a film, which will 
+1. Borrow a film, which will decrement the amount in stock and store the transaction in the customer's history.
+2. Return a film, which will increment the amount in stock and store the transaction in the customer's history.
+3. Display inventory, which will show all available movies currently in the store, and how many copies are in stock for each.
+4. Print customer history, which will display all transactions for a given customer.
+
