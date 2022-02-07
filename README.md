@@ -15,3 +15,5 @@ When simulating activity, four different actions will be permitted in this progr
 3. Display inventory, which will show all available movies currently in the store, and how many copies are in stock for each.
 4. Print customer history, which will display all transactions for a given customer.
 
+## Running the Simulation
+The entry point for this program is driver.cpp, which will perform checks on input files before creating a Store object. The Store object will interact will all other classes to read input, parse transactions, and perform actions. In driver.cpp, all the the Store methods will be called in order before outputing the results to the user.
